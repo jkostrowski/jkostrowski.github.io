@@ -1,0 +1,62 @@
+<!doctype html>
+<html ng-app="app">
+
+<head>
+  <title>Lean Meal</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-sanitize.min.js"></script>
+
+  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"> -->
+
+  <script>
+    angular.module('app', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+    angular.module('app').controller('main', function ($scope) {
+      $scope.rate = 3;
+      $scope.max = 5;
+      $scope.isReadonly = false;
+
+      $scope.hoveringOver = function (value) {
+        $scope.overStar = value;
+        $scope.percent = Math.round(100 * (value / $scope.max));
+      };
+
+      $scope.ratingStates = [
+        { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
+        { stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty' },
+        { stateOn: 'glyphicon-heart', stateOff: 'glyphicon-ban-circle' },
+        { stateOn: 'glyphicon-heart' },
+        { stateOff: 'glyphicon-off' }
+      ];
+    });
+  </script>
+
+
+
+</head>
+
+<body>
+  <div ng-controller="main">
+    <h4>Default</h4>
+    <span uib-rating ng-model="rate" max="max" read-only="isReadonly" on-hover="hoveringOver(value)"
+      on-leave="overStar = null" titles="['one','two','three']" aria-labelledby="default-rating"></span>
+    <span class="label"
+      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
+      ng-show="overStar && !isReadonly">{{percent}}%</span>
+
+    <pre
+      style="margin:15px 0;">Rate: <b>{{rate}}</b> - Readonly is: <i>{{isReadonly}}</i> - Hovering over: <b>{{overStar || "none"}}</b></pre>
+
+    <button type="button" class="btn btn-sm btn-danger" ng-click="rate = 0" ng-disabled="isReadonly">Clear</button>
+    <button type="button" class="btn btn-sm btn-default" ng-click="isReadonly = ! isReadonly">Toggle Readonly</button>
+
+  </div>
+
+</body>
+
+
+</html>
