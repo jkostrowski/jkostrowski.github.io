@@ -16,11 +16,11 @@
 
   <style>
     body {
-      font-size: 30px;
+      font-size: 25px;
     }
 
     h4 {
-      font-size: 40px;
+      font-size: 35px;
     }
   </style>
 
@@ -29,8 +29,14 @@
     angular.module('app', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
     angular.module('app').controller('main', function ($scope) {
       $scope.foods = [
-        { label: 'chicken', value: 0, max: 8, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 }
+        { label: 'chicken', value: 0, max: 8, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 },
+        { label: 'beef', value: 0, max: 8, unitWeight: 250, f100: 12, c100: 0, p100: 26 },
+        { label: 'oli', value: 0, max: 4, unitWeight: 15, f100: 15, c100: 0, p100: 0 },
+        { label: 'corn', value: 0, max: 3, unitWeight: 440, f100: 0, c100: 7, p100: 1 },
+        { label: 'bean', value: 0, max: 3, unitWeight: 15, f100: 0, c100: 15, p100: 5 },
       ]
+
+      $scope.portions = 6
 
       $scope.ratingStates = [
         { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
@@ -49,6 +55,34 @@
 <body>
   <div ng-controller="main">
     <div class="container-fluid">
+
+      <div class="row" style="background-color: rgba(0, 153, 255, 0.4)">
+        <table class="table">
+          <tr>
+            <td>300</td>
+            <td>10g</td>
+            <td>23g</td>
+            <td>45g</td>
+          </tr>
+          <tr>
+            <th>Cal</th>
+            <th>Fat</th>
+            <th>Carb</th>
+            <th>Prot</th>
+          </tr>
+        </table>
+      </div>
+
+      <div class="row" style="background-color: rgba(0, 153, 255, 0.2)">
+        <div class="col">Portions</div>
+        <div class="col">
+          <span uib-rating ng-model="portions" max="10"></span>
+        </div>
+        <div class="col">
+          <span class="label label-info">{{portions}}</span>
+        </div>
+      </div>
+
       <div class="row" ng-repeat="food in foods">
         <div class="col">{{food.label}}</div>
         <div class="col">
