@@ -25,16 +25,12 @@
   </style>
 
   <script>
+
     angular.module('app', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
     angular.module('app').controller('main', function ($scope) {
-      $scope.rate = 3;
-      $scope.max = 5;
-      $scope.isReadonly = false;
-
-      $scope.hoveringOver = function (value) {
-        $scope.overStar = value;
-        $scope.percent = Math.round(100 * (value / $scope.max));
-      };
+      $scope.foods = [
+        { label: 'chicken', value: 0, max: 8, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 }
+      ]
 
       $scope.ratingStates = [
         { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
@@ -52,21 +48,17 @@
 
 <body>
   <div ng-controller="main">
-    <h4>Default</h4>
-
-    <span uib-rating ng-model="rate" max="max" read-only="isReadonly" on-hover="hoveringOver(value)"
-      on-leave="overStar = null" titles="['one','two','three']" aria-labelledby="default-rating"></span>
-
-    <span class="label"
-      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
-      ng-show="overStar && !isReadonly">{{percent}}%</span>
-
-    <pre
-      style="margin:15px 0;">Rate: <b>{{rate}}</b> - Readonly is: <i>{{isReadonly}}</i> - Hovering over: <b>{{overStar || "none"}}</b></pre>
-
-    <button type="button" class="btn btn-sm btn-danger" ng-click="rate = 0" ng-disabled="isReadonly">Clear</button>
-    <button type="button" class="btn btn-sm btn-default" ng-click="isReadonly = ! isReadonly">Toggle Readonly</button>
-
+    <div class="container-fluid">
+      <div class="row" ng-repeat="food in foods">
+        <div class="col">{{food.label}}</div>
+        <div class="col">
+          <span uib-rating ng-model="food.value" max="food.max"></span>
+        </div>
+        <div class="col">
+          <span class="label label-info">{{food.value * food.unitWeight}}</span>
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>
