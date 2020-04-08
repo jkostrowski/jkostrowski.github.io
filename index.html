@@ -22,6 +22,10 @@
     h4 {
       font-size: 35px;
     }
+
+    :focus {
+      outline: 0 !important;
+    }
   </style>
 
   <script>
@@ -29,11 +33,11 @@
     angular.module('app', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
     angular.module('app').controller('main', function ($scope) {
       $scope.foods = [
-        { label: 'chicken', value: 0, max: 8, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 },
-        { label: 'beef', value: 0, max: 8, unitWeight: 250, f100: 12, c100: 0, p100: 26 },
-        { label: 'oli', value: 0, max: 4, unitWeight: 15, f100: 100, c100: 0, p100: 0 },
-        { label: 'corn', value: 0, max: 3, unitWeight: 440, f100: 0, c100: 7, p100: 1 },
-        { label: 'bean', value: 0, max: 3, unitWeight: 15, f100: 0, c100: 15, p100: 5 },
+        { label: 'chicken', value: 0, max: 8, unit: null, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 },
+        { label: 'beef', value: 0, max: 8, unit: null, unitWeight: 250, f100: 12, c100: 0, p100: 26 },
+        { label: 'oli', value: 0, max: 4, unit: 'spoons', unitWeight: 15, f100: 100, c100: 0, p100: 0 },
+        { label: 'corn', value: 0, max: 3, unit: 'cans', unitWeight: 440, f100: 0, c100: 7, p100: 1 },
+        { label: 'bean', value: 0, max: 3, unit: 'cans', unitWeight: 15, f100: 0, c100: 15, p100: 5 },
       ]
 
       $scope.portions = 6
@@ -55,18 +59,15 @@
         $scope.$watchCollection(`foods[${i}]`, nutritionCalc)
       })
 
-      $scope.ratingStates = [
-        { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
-        { stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty' },
-        { stateOn: 'glyphicon-heart', stateOff: 'glyphicon-ban-circle' },
-        { stateOn: 'glyphicon-heart' },
-        { stateOff: 'glyphicon-off' }
-      ];
-    });
+      // $scope.ratingStates = [
+      //   { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
+      //   { stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty' },
+      //   { stateOn: 'glyphicon-heart', stateOff: 'glyphicon-ban-circle' },
+      //   { stateOn: 'glyphicon-heart' },
+      //   { stateOff: 'glyphicon-off' }
+      // ];
+    })
   </script>
-
-
-
 </head>
 
 <body>
@@ -99,7 +100,9 @@
       </div>
 
       <div class="row" ng-repeat="food in foods">
-        <div class="col">{{food.label}} <span class="label label-info">{{food.value * food.unitWeight}}</span></div>
+        <div class="col">{{food.label}} <span
+            class="label label-info">{{food.unit ? food.value+" "+food.unit : (food.value * food.unitWeight) +" g"}}</span>
+        </div>
         <div class="col">
           <span uib-rating ng-model="food.value" max="food.max"></span>
         </div>
