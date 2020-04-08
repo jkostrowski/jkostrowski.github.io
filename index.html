@@ -37,7 +37,7 @@
         { label: 'beef', value: 0, max: 8, unit: null, unitWeight: 250, f100: 12, c100: 0, p100: 26 },
         { label: 'oli', value: 0, max: 4, unit: 'spoons', unitWeight: 15, f100: 100, c100: 0, p100: 0 },
         { label: 'corn', value: 0, max: 3, unit: 'cans', unitWeight: 440, f100: 0, c100: 7, p100: 1 },
-        { label: 'bean', value: 0, max: 3, unit: 'cans', unitWeight: 15, f100: 0, c100: 15, p100: 5 },
+        { label: 'bean', value: 0, max: 3, unit: 'cans', unitWeight: 440, f100: 0, c100: 15, p100: 5 },
       ]
 
       $scope.portions = 6
@@ -58,53 +58,55 @@
       $scope.foods.forEach((_, i) => {
         $scope.$watchCollection(`foods[${i}]`, nutritionCalc)
       })
-
-      // $scope.ratingStates = [
-      //   { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
-      //   { stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty' },
-      //   { stateOn: 'glyphicon-heart', stateOff: 'glyphicon-ban-circle' },
-      //   { stateOn: 'glyphicon-heart' },
-      //   { stateOff: 'glyphicon-off' }
-      // ];
     })
   </script>
 </head>
 
 <body>
   <div ng-controller="main">
-    <div class="container-fluid">
+    <div class="container">
 
       <div class="row" style="background-color: rgba(0, 153, 255, 0.4)">
-        <table class="table">
-          <tr>
-            <td>{{totalCal}}</td>
-            <td>{{totalFat}}g</td>
-            <td>{{totalCarb}}g</td>
-            <td>{{totalProt}}g</td>
-          </tr>
-          <tr>
-            <th>Cal</th>
-            <th>Fat</th>
-            <th>Carb</th>
-            <th>Prot</th>
-          </tr>
-        </table>
+        <div class="col">
+          <table class="table">
+            <tr>
+              <td>{{totalCal}}</td>
+              <td>{{totalFat}}g</td>
+              <td>{{totalCarb}}g</td>
+              <td>{{totalProt}}g</td>
+            </tr>
+            <tr>
+              <th>Cal</th>
+              <th>Fat</th>
+              <th>Carb</th>
+              <th>Prot</th>
+            </tr>
+          </table>
+        </div>
       </div>
 
       <div class="row" style="background-color: rgba(0, 153, 255, 0.2)">
-        <div class="col">Portions: <span class="label label-info">{{portions}}</span>
-        </div>
-        <div class="col">
+        <div class="col-xs-8">Portions:</div>
+        <div class="col-xs-4"><span class="label label-info">{{portions}}</span></div>
+      </div>
+
+      <div class="row" style="background-color: rgba(0, 153, 255, 0.2); padding-left: 10px">
+        <div class="col-xs">
           <span uib-rating ng-model="portions" max="10"></span>
         </div>
       </div>
 
-      <div class="row" ng-repeat="food in foods">
-        <div class="col">{{food.label}} <span
-            class="label label-info">{{food.unit ? food.value+" "+food.unit : (food.value * food.unitWeight) +" g"}}</span>
+      <div ng-repeat="food in foods">
+        <div class="row">
+          <div class="col-xs-8">{{food.label}}</div>
+          <div class="col-xs-4"><span
+              class="label label-info">{{food.unit ? food.value+" "+food.unit : (food.value * food.unitWeight) +" g"}}</span>
+          </div>
         </div>
-        <div class="col">
-          <span uib-rating ng-model="food.value" max="food.max"></span>
+        <div class="row">
+          <div class="col-xs" style="padding-left: 10px">
+            <span uib-rating ng-model="food.value" max="food.max"></span>
+          </div>
         </div>
       </div>
     </div>
