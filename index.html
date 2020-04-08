@@ -31,12 +31,29 @@
       $scope.foods = [
         { label: 'chicken', value: 0, max: 8, unitWeight: 250, f100: 3.5, c100: 0, p100: 31 },
         { label: 'beef', value: 0, max: 8, unitWeight: 250, f100: 12, c100: 0, p100: 26 },
-        { label: 'oli', value: 0, max: 4, unitWeight: 15, f100: 15, c100: 0, p100: 0 },
+        { label: 'oli', value: 0, max: 4, unitWeight: 15, f100: 100, c100: 0, p100: 0 },
         { label: 'corn', value: 0, max: 3, unitWeight: 440, f100: 0, c100: 7, p100: 1 },
         { label: 'bean', value: 0, max: 3, unitWeight: 15, f100: 0, c100: 15, p100: 5 },
       ]
 
       $scope.portions = 6
+
+      $scope.totalCal = 0
+      $scope.totalFat = 0
+      $scope.totalCarb = 0
+      $scope.totalProt = 0
+
+      var nutritionCalc = function (a, b) {
+        $scope.totalFat = Math.round($scope.foods.map(x => x.value * x.unitWeight * x.f100 / 100).reduce((y, z) => y + z, 0) / $scope.portions)
+        $scope.totalCarb = Math.round($scope.foods.map(x => x.value * x.unitWeight * x.c100 / 100).reduce((y, z) => y + z, 0) / $scope.portions)
+        $scope.totalProt = Math.round($scope.foods.map(x => x.value * x.unitWeight * x.p100 / 100).reduce((y, z) => y + z, 0) / $scope.portions)
+        $scope.totalCal = 9 * $scope.totalFat + 4 * $scope.totalCarb + 4 * $scope.totalProt
+      }
+
+      $scope.$watchCollection('portions', nutritionCalc)
+      $scope.foods.forEach((_, i) => {
+        $scope.$watchCollection(`foods[${i}]`, nutritionCalc)
+      })
 
       $scope.ratingStates = [
         { stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle' },
@@ -59,10 +76,10 @@
       <div class="row" style="background-color: rgba(0, 153, 255, 0.4)">
         <table class="table">
           <tr>
-            <td>300</td>
-            <td>10g</td>
-            <td>23g</td>
-            <td>45g</td>
+            <td>{{totalCal}}</td>
+            <td>{{totalFat}}g</td>
+            <td>{{totalCarb}}g</td>
+            <td>{{totalProt}}g</td>
           </tr>
           <tr>
             <th>Cal</th>
@@ -74,22 +91,17 @@
       </div>
 
       <div class="row" style="background-color: rgba(0, 153, 255, 0.2)">
-        <div class="col">Portions</div>
-        <div class="col">
-          <span uib-rating ng-model="portions" max="10"></span>
+        <div class="col">Portions: <span class="label label-info">{{portions}}</span>
         </div>
         <div class="col">
-          <span class="label label-info">{{portions}}</span>
+          <span uib-rating ng-model="portions" max="10"></span>
         </div>
       </div>
 
       <div class="row" ng-repeat="food in foods">
-        <div class="col">{{food.label}}</div>
+        <div class="col">{{food.label}} <span class="label label-info">{{food.value * food.unitWeight}}</span></div>
         <div class="col">
           <span uib-rating ng-model="food.value" max="food.max"></span>
-        </div>
-        <div class="col">
-          <span class="label label-info">{{food.value * food.unitWeight}}</span>
         </div>
       </div>
     </div>
